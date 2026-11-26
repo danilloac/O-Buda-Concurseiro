@@ -10,6 +10,9 @@ create table if not exists public.estado_app (
 
 alter table public.estado_app enable row level security;
 
+-- Projetos novos do Supabase não liberam tabelas criadas por SQL para a API: sem isto a sincronização falha.
+grant select, insert, update on public.estado_app to authenticated;
+
 create policy "cada um lê o seu estado"
   on public.estado_app for select
   using (auth.uid() = user_id);
