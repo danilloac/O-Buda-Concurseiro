@@ -35,5 +35,9 @@ export function migrar(bruto: unknown): EstadoApp {
     // v5 tinha o edital fixo no código: passa a ficar nos dados, para poder importar outro.
     e = { ...e, versao: 6, editalItens: e.editalItens ?? EDITAL }
   }
+  if (e.versao! < 7) {
+    // v6 não recebia a leitura do Tec direto no app.
+    e = { ...e, versao: 7, importacoes: e.importacoes ?? [] }
+  }
   return e as EstadoApp
 }

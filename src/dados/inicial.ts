@@ -97,7 +97,7 @@ export function historicoInicial(): GiroFechado[] {
 
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 6,
+    versao: 7,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -168,6 +168,7 @@ export function estadoInicial(): EstadoApp {
     errosTec: errosIniciais(),
     editalItens: EDITAL,
     edital: {},
+    importacoes: [],
     horasHoje: null,
   }
 }

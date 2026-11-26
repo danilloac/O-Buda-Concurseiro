@@ -77,6 +77,18 @@ export function Conta() {
       </section>
 
       <section className="cartao conta">
+        <h2>Leitura do Tec</h2>
+        <p>
+          Última leitura: {estado.errosTec.leitura ? estado.errosTec.leitura.split('-').reverse().join('/') : 'nenhuma'}.{' '}
+          {estado.importacoes.length ? `${estado.importacoes.length} leituras recebidas direto no app.` : 'Ainda nenhuma recebida direto no app.'}
+        </p>
+        <p className="discreto">
+          Peça ao Claude para ler as estatísticas do Tec. Ele lê os cadernos no Chrome, grava na planilha e abre este app na mesma janela para
+          mandar a leitura. {supabase ? (sessao ? 'Como você está conectado, o celular recebe na sincronização.' : 'Entre com o Google neste navegador para o celular receber também.') : 'Com a nuvem ligada, o celular recebe na sincronização.'}
+        </p>
+      </section>
+
+      <section className="cartao conta">
         <h2>Dados</h2>
         <p>Volta para os dados copiados da planilha em 26/11/2026 (Giro 6).</p>
         {confirmar ? (

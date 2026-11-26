@@ -3,6 +3,7 @@ import { useEstado } from '../dados/Estado'
 import { dataCurta, hojeISO } from '../dominio/datas'
 import { LIMITES_ERROS, errosPorMateria, errosPorTopico, type LeituraPeso, type Situacao } from '../dominio/erros'
 import { fmtPct } from '../dominio/log'
+import { ImportarTec } from '../componentes/ImportarTec'
 import { adicionarNaRevisao, estaNaRevisao } from '../dominio/revisao'
 
 const LEITURA: Record<LeituraPeso, { texto: string; classe: string }> = {
@@ -42,6 +43,7 @@ export function Erros() {
         <section className="cartao">
           <p className="vazio">Ainda não há leitura do Tec. Ela chega quando a leitura das estatísticas do Tec rodar.</p>
         </section>
+        <ImportarTec />
       </>
     )
   }
@@ -181,6 +183,7 @@ export function Erros() {
           do Tec atualiza estes números.
         </p>
       </section>
+      <ImportarTec />
     </>
   )
 }

@@ -511,3 +511,13 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
 .previa-importacao li { display: inline-flex; gap: 6px; align-items: center; }
 .previa-importacao .erro { margin: 8px 0 0; }
 .importar-edital textarea::placeholder { color: var(--texto-3); font-weight: 400; }
+
+/* ---------- Receber leitura do Tec ---------- */
+.importar-tec { margin-top: 14px; display: block; }
+.importar-tec summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.importar-tec summary::-webkit-details-marker { display: none; }
+.importar-tec summary h2 { margin: 0; }
+.importar-tec summary h2::before { content: '▸ '; color: var(--texto-3); }
+.importar-tec[open] summary h2::before { content: '▾ '; }
+.importar-tec[open] > * + * { margin-top: 12px; }
+.importar-tec textarea { font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--texto); background: var(--superficie-2); border: 1px solid var(--borda); border-radius: 12px; padding: 10px 12px; width: 100%; min-width: 0; resize: vertical; }

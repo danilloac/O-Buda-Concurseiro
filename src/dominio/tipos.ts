@@ -137,7 +137,7 @@ export interface ItemEdital {
 export type StatusEdital = 'Não visto' | 'Teoria' | 'Questões' | 'Revisado'
 
 export interface EstadoApp {
-  versao: 6
+  versao: 7
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]
@@ -150,5 +150,6 @@ export interface EstadoApp {
   errosTec: ErrosTec
   editalItens: ItemEdital[]
   edital: Record<string, StatusEdital> // nº do item → status (ausente = Não visto)
+  importacoes: string[] // lotes da leitura do Tec já aplicados (os mais recentes)
   horasHoje: { data: string; horas: number } | null
 }

@@ -4,13 +4,11 @@ App de estudos para concursos (PWA) baseado na planilha do Método do Buda: estu
 
 Funciona no celular (instala pela tela inicial), no tablet e no computador. Os dados ficam salvos no aparelho e, com login Google, sincronizam pelo Supabase.
 
-## O que já existe
+## Telas
 
-- **Hoje**: contagem regressiva das provas, horas de hoje e o plano do dia (caderno de erros, revisões com os tópicos da fila e inéditas a partir da próxima matéria), progresso do giro e lembretes.
-- **Giro**: matérias na ordem do ciclo, blocos clicáveis coloridos por faixa (mínimo, ideal, cauda, extra), status, checks de erros e de revisão (matéria 5 posições antes), reordenar e fechar giro com histórico.
-- **Conta**: login Google, estado da sincronização e restaurar os dados da planilha.
+Hoje, Giro, Registrar (Log de questões), Painel, Raio-X, Revisão, Caderno de erros (Erra × peso), Edital verticalizado (com importação), Histórico dos giros, Configuração (plano, matérias, provas, lembretes e "começar novo concurso") e Conta.
 
-As regras estão em `src/dominio/giro.ts` e os testes em `src/dominio/giro.test.ts` conferem os números com o Diário da planilha (9 de 11 matérias, 141 de 144 questões, 15 inéditas com 3 horas).
+As regras ficam em `src/dominio/*.ts`, com testes que conferem os números com a planilha.
 
 ## Rodar
 
@@ -23,14 +21,27 @@ npm run build
 
 ## Ligar a nuvem (Supabase + Vercel)
 
-1. Crie um projeto grátis em https://supabase.com.
-2. No **SQL Editor**, rode `supabase/migrations/0001_estado_app.sql`.
-3. Em **Authentication → Providers**, ative **Google** (precisa de um Client ID do Google Cloud) e, em **URL Configuration**, adicione a URL do app (ex.: `https://seu-app.vercel.app`).
-4. Copie `.env.example` para `.env.local` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (em **Project Settings → API**).
-5. Na Vercel, importe este repositório (framework Vite) e coloque as mesmas duas variáveis em **Environment Variables**.
+1. Crie um projeto grátis em https://supabase.com (região São Paulo).
+2. No **SQL Editor**, cole e rode `supabase/migrations/0001_estado_app.sql`.
+3. **Login com Google**: no Google Cloud Console, crie um *OAuth Client ID* (tipo Web) com a URL de retorno que o Supabase mostra em **Authentication → Providers → Google**; cole o Client ID e o Secret ali e ative.
+4. Na Vercel, importe este repositório (framework Vite) e coloque em **Environment Variables** `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (em **Project Settings → API** do Supabase). Faça o deploy.
+5. Volte ao Supabase, em **Authentication → URL Configuration**, e coloque a URL da Vercel em *Site URL* e em *Redirect URLs*.
+6. Abra o app, entre com o Google em **Conta** no computador e no celular.
 
-Sem essas variáveis o app funciona normalmente, só que salva apenas no navegador.
+Sem essas variáveis o app funciona, só que salva apenas no navegador. Para rodar local, copie `.env.example` para `.env.local` com as mesmas variáveis.
 
-## Próximas telas
+## Leitura do Tec
 
-Registrar questões (Log), Painel com gráficos, Raio-X, fila de Revisão, Caderno de erros (Erra × peso), Edital verticalizado e Configuração das matérias.
+A skill que lê as estatísticas do Tec pelo Chrome, depois de gravar na planilha, abre o app numa aba do mesmo Chrome e chama:
+
+```js
+window.budaTec.situacao()   // { pronto, logado, sync, ultimaLeitura, registros }
+window.budaTec.importar({
+  lote: '2026-11-27T21:00',         // identifica a leitura; repetir não duplica
+  leitura: '2026-11-27',
+  questoes: [['Banco de Dados', 'Oracle', 6, 4]],      // matéria, tópico, resolvidas, acertos
+  erros: { linhas: [['Banco de Dados', 'PostgreSQL', 8, 4, 3, 2]] }, // matéria, tópico, no caderno, refeitas acertos, refeitas erros, recorrentes
+})
+```
+
+As questões entram no Log, o caderno de erros é trocado pela fotografia nova (em partes: `substituir: false` a partir da segunda, com lotes `x#1`, `x#2`...) e, com login, tudo sincroniza com o celular. O mesmo JSON pode ser colado à mão no fim da tela Erros.

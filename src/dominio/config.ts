@@ -106,6 +106,7 @@ export function novoConcurso(e: EstadoApp, o: OpcoesNovoConcurso, hoje: string, 
     errosTec: { leitura: '', materias: [], topicos: [] },
     editalItens: [],
     edital: {},
+    importacoes: [],
     horasHoje: null,
   }
 }
