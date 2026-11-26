@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useEstado } from '../dados/Estado'
 import { dataCurta, hojeISO } from '../dominio/datas'
 import {
@@ -191,25 +192,9 @@ export function Giro() {
       </div>
 
       {estado.historico.length > 0 && (
-        <section className="cartao" style={{ marginTop: 18 }}>
-          <div className="secao-titulo">
-            <h2>Histórico de giros</h2>
-          </div>
-          <ul className="historico">
-            {[...estado.historico].reverse().map((g) => (
-              <li key={g.numero}>
-                <strong>Giro {g.numero}</strong>
-                <span className="discreto">
-                  {dataCurta(g.inicio)} → {dataCurta(g.fechamento)}
-                </span>
-                <span>
-                  {g.feitas} de {g.meta} questões · erros {g.materiasComErros}/{g.totalMaterias} · revisão{' '}
-                  {g.materiasComRevisao}/{g.totalMaterias}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <p className="discreto" style={{ marginTop: 18 }}>
+          {estado.historico.length} giros fechados. <Link to="/historico">Ver o histórico</Link>
+        </p>
       )}
     </>
   )

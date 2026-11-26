@@ -464,3 +464,8 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
 .eg-status.teoria { background: color-mix(in srgb, var(--primaria) 14%, transparent); color: var(--primaria); border-color: transparent; }
 .eg-status.questoes { background: color-mix(in srgb, var(--primaria) 30%, transparent); color: var(--primaria); border-color: transparent; }
 .eg-status.revisado { background: var(--primaria); color: var(--superficie); border-color: transparent; }
+
+/* ---------- Histórico ---------- */
+.sem-quebra { white-space: nowrap; }
+.linha-atual { background: color-mix(in srgb, var(--primaria) 5%, transparent); }
+.hist-chip { margin-left: 8px; font-size: 11px; padding: 1px 8px; }

@@ -1,4 +1,4 @@
-import type { EstadoApp, LogQuestao, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
+import type { EstadoApp, GiroFechado, LogQuestao, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
 import logBruto from './log-inicial.json'
 import { errosIniciais } from './erros-inicial'
 
@@ -74,9 +74,29 @@ export function logInicial(): LogQuestao[] {
   }))
 }
 
+/** Aba Histórico: giros 1 a 5. */
+export function historicoInicial(): GiroFechado[] {
+  const g = (numero: number, inicio: string, fechamento: string, materias: number, diasErros: number, diasRevisao: number): GiroFechado => ({
+    numero,
+    inicio,
+    fechamento,
+    totalMaterias: materias,
+    concluidas: materias,
+    diasErros,
+    diasRevisao,
+  })
+  return [
+    g(1, '', '2026-10-19', 13, 6, 6),
+    g(2, '2026-10-19', '2026-10-26', 13, 6, 6),
+    g(3, '2026-10-26', '2026-11-07', 11, 9, 11),
+    g(4, '2026-11-07', '2026-11-13', 11, 11, 11),
+    g(5, '2026-11-13', '2026-11-21', 11, 11, 10),
+  ]
+}
+
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 4,
+    versao: 5,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -116,7 +136,7 @@ export function estadoInicial(): EstadoApp {
         seguranca: marc(0, 8, false),
       },
     },
-    historico: [],
+    historico: historicoInicial(),
     revisao: [
       t('r1', 'Sistemas Operacionais', 'Unix e Linux', 'GRAN', 'Altíssima', 0.4, 'Parcialmente compreendido'),
       t('r2', 'Sistemas Operacionais', 'Windows Powershell e Prompt de Comando', '', 'Alta', 0.38, 'Não compreendido'),

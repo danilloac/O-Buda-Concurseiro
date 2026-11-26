@@ -58,13 +58,18 @@ export interface GiroAtual {
 
 export interface GiroFechado {
   numero: number
-  inicio: string
+  inicio: string // '' quando a planilha não registra (giro 1)
   fechamento: string
-  feitas: number
-  meta: number
-  materiasComErros: number
-  materiasComRevisao: number
   totalMaterias: number
+  concluidas?: number // matérias com as inéditas do giro feitas
+  // Fechados pelo app: questões marcadas no giro e matérias com caderno/revisão.
+  feitas?: number
+  meta?: number
+  materiasComErros?: number
+  materiasComRevisao?: number
+  // Vindos da aba Histórico da planilha: dias com caderno de erros e com revisão.
+  diasErros?: number
+  diasRevisao?: number
 }
 
 export interface TopicoRevisao {
@@ -131,7 +136,7 @@ export interface ItemEdital {
 export type StatusEdital = 'Não visto' | 'Teoria' | 'Questões' | 'Revisado'
 
 export interface EstadoApp {
-  versao: 4
+  versao: 5
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]

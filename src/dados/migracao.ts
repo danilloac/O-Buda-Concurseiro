@@ -1,5 +1,5 @@
 import type { EstadoApp } from '../dominio/tipos'
-import { MATERIAS, logInicial } from './inicial'
+import { MATERIAS, historicoInicial, logInicial } from './inicial'
 import { errosIniciais } from './erros-inicial'
 
 /** Atualiza um estado salvo por uma versão anterior do app. */
@@ -22,6 +22,13 @@ export function migrar(bruto: unknown): EstadoApp {
       edital: e.edital ?? {},
       materias: materias.some((x) => x.id === 'redacao') ? materias : [...materias, ...MATERIAS.filter((x) => x.id === 'redacao')],
     }
+  }
+  if (e.versao! < 5) {
+    // v4 começava com o histórico vazio: entram os giros 1 a 5 da planilha que faltarem.
+    const atual = e.historico ?? []
+    const numeros = new Set(atual.map((g) => g.numero))
+    const faltam = historicoInicial().filter((g) => !numeros.has(g.numero) && g.numero < (e.giro?.numero ?? 6))
+    e = { ...e, versao: 5, historico: [...faltam, ...atual].sort((a, b) => a.numero - b.numero) }
   }
   return e as EstadoApp
 }
