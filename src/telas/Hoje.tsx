@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEstado } from '../dados/Estado'
 import { contagemRegressiva, dataPorExtenso, hojeISO } from '../dominio/datas'
 import { linhasDoGiro, planoDoDia, resumoDoGiro } from '../dominio/giro'
+import { doDia, fmtPct, totais } from '../dominio/log'
 import { Anel } from '../componentes/Anel'
 
 const ATALHOS = [1, 2, 3, 4, 5]
@@ -22,6 +23,7 @@ export function Hoje() {
   const resumo = resumoDoGiro(estado, linhas)
   const plano = planoDoDia(estado, horas, resumo)
   const proxima = linhas.find((l) => l.materia.id === resumo.proxima?.id)
+  const logHoje = totais(doDia(estado.log, hoje))
 
   const definirHoras = (h: number) =>
     atualizar((e) => ({ ...e, horasHoje: { data: hoje, horas: Math.min(16, Math.max(0, h)) } }))
@@ -33,7 +35,7 @@ export function Hoje() {
     <>
       <header className="topo">
         <div>
-          <div className="sobre">{dataPorExtenso()}</div>
+          <div className="sobre data">{dataPorExtenso()}</div>
           <h1>{saudacao()}! Bora girar.</h1>
         </div>
         <span className="chip primaria">Giro {resumo.numero}</span>
@@ -124,6 +126,16 @@ export function Hoje() {
                 <span className="num">{plano.ineditas}</span>
               </li>
             </ul>
+            <div className="atalho-log">
+              <span>
+                {logHoje.resolvidas > 0
+                  ? `Hoje no Log: ${logHoje.resolvidas} questões · ${fmtPct(logHoje.pct)} de acerto`
+                  : 'Nada registrado hoje ainda.'}
+              </span>
+              <Link to="/registrar" className="botao secundario">
+                Registrar questões
+              </Link>
+            </div>
           </section>
         </div>
 

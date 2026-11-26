@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import type { Session } from '@supabase/supabase-js'
 import type { EstadoApp } from '../dominio/tipos'
 import { estadoInicial } from './inicial'
+import { migrar } from './migracao'
 import { baixarEstado, enviarEstado, supabase } from './supabase'
 
 const CHAVE_LOCAL = 'buda:estado:v1'
@@ -9,7 +10,7 @@ const CHAVE_LOCAL = 'buda:estado:v1'
 function lerLocal(): EstadoApp {
   try {
     const bruto = localStorage.getItem(CHAVE_LOCAL)
-    if (bruto) return JSON.parse(bruto) as EstadoApp
+    if (bruto) return migrar(JSON.parse(bruto))
   } catch {
     /* navegador sem armazenamento: segue com o inicial */
   }
@@ -59,7 +60,8 @@ export function ProvedorEstado({ children }: { children: ReactNode }) {
     }
     setSync('sincronizando')
     baixarEstado(sessao.user.id)
-      .then((remoto) => {
+      .then((salvo) => {
+        const remoto = salvo ? migrar(salvo) : null
         setEstado((local) => {
           const fica = remoto && remoto.atualizadoEm > local.atualizadoEm ? remoto : local
           gravarLocal(fica)

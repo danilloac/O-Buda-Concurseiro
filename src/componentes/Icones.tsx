@@ -18,3 +18,9 @@ export const IconeConta = () => (
     <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
   </svg>
 )
+export const IconeRegistrar = () => (
+  <svg {...base} aria-hidden="true">
+    <rect x="4" y="3" width="16" height="18" rx="3" />
+    <path d="M8 8h8M8 12h8M8 16h4" />
+  </svg>
+)

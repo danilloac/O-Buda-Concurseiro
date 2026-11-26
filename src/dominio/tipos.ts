@@ -85,8 +85,19 @@ export interface Lembrete {
   feito: boolean
 }
 
+/** Uma linha da aba Logs Questões. */
+export interface LogQuestao {
+  id: string
+  data: string // AAAA-MM-DD
+  materiaId: string
+  topico: string // nome do filtro do Tec
+  resolvidas: number
+  acertos: number
+  obs: string
+}
+
 export interface EstadoApp {
-  versao: 1
+  versao: 2
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]
@@ -95,5 +106,6 @@ export interface EstadoApp {
   historico: GiroFechado[]
   revisao: TopicoRevisao[]
   lembretes: Lembrete[]
+  log: LogQuestao[]
   horasHoje: { data: string; horas: number } | null
 }

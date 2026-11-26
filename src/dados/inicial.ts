@@ -1,7 +1,8 @@
-import type { EstadoApp, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
+import type { EstadoApp, LogQuestao, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
+import logBruto from './log-inicial.json'
 
 // Dados iniciais copiados da planilha "TRT 8 e 4" em 26/11/2026
-// (abas Formulário inicial, Configuração inicial, Diário e Revisão).
+// (abas Formulário inicial, Configuração inicial, Diário, Revisão e Logs Questões).
 
 const m = (
   id: string,
@@ -58,9 +59,22 @@ const t = (
   recorrente = false,
 ): TopicoRevisao => ({ id, materia, topico, observacao, incidencia, acumulado, status, recorrente })
 
+/** Logs Questões: 369 linhas, 979 questões, 660 acertos. */
+export function logInicial(): LogQuestao[] {
+  return (logBruto as [string, string, string, number, number][]).map(([data, materiaId, topico, resolvidas, acertos], i) => ({
+    id: `p${i + 1}`,
+    data,
+    materiaId,
+    topico,
+    resolvidas,
+    acertos,
+    obs: '',
+  }))
+}
+
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 1,
+    versao: 2,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -127,6 +141,7 @@ export function estadoInicial(): EstadoApp {
       { id: 'sustentabilidade', nome: 'Sustentabilidade', nota: 'Tudo', feito: false },
       { id: 'pcd', nome: 'Direitos das Pessoas com Deficiência', nota: '', feito: false },
     ],
+    log: logInicial(),
     horasHoje: null,
   }
 }

@@ -12,6 +12,7 @@ import {
   resumoDoGiro,
   rotuloStatus,
 } from '../dominio/giro'
+import { desde, fmtPct, totais } from '../dominio/log'
 
 export function Giro() {
   const { estado, atualizar } = useEstado()
@@ -20,6 +21,7 @@ export function Giro() {
   const tam = estado.parametros.tamanhoBloco
   const linhas = linhasDoGiro(estado)
   const resumo = resumoDoGiro(estado, linhas)
+  const noLog = totais(desde(estado.log, resumo.inicio))
   const pct = resumo.meta ? Math.min(100, Math.round((resumo.feitas / resumo.meta) * 100)) : 0
 
   return (
@@ -69,6 +71,9 @@ export function Giro() {
             <span>revisões feitas</span>
           </div>
         </div>
+        <p className="discreto" style={{ margin: 0 }}>
+          Registradas no Log desde o início do giro: {noLog.resolvidas} questões · {fmtPct(noLog.pct)} de acerto
+        </p>
         {confirmar && (
           <div className="aviso" role="alertdialog" aria-label="Confirmar fechamento do giro">
             <span>
