@@ -33,6 +33,19 @@ export function Erros() {
   const total = materias.reduce((s, m) => s + m.noCaderno, 0)
   const recorrentes = materias.reduce((s, m) => s + m.recorrentes, 0)
 
+  if (!estado.errosTec.leitura) {
+    return (
+      <>
+        <header className="topo">
+          <h1>Caderno de erros</h1>
+        </header>
+        <section className="cartao">
+          <p className="vazio">Ainda não há leitura do Tec. Ela chega quando a leitura das estatísticas do Tec rodar.</p>
+        </section>
+      </>
+    )
+  }
+
   return (
     <>
       <header className="topo">

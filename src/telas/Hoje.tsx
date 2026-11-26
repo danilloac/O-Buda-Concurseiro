@@ -120,7 +120,7 @@ export function Hoje() {
                   <h3>Questões inéditas</h3>
                   <div className="detalhe">
                     {plano.blocos} {plano.blocos === 1 ? 'bloco' : 'blocos'}
-                    {plano.comecarPor ? ` · começando por ${plano.comecarPor.nome}` : ' · giro concluído'}
+                    {plano.comecarPor ? ` · começando por ${plano.comecarPor.nome}` : resumo.totalMaterias ? ' · giro concluído' : ''}
                   </div>
                 </div>
                 <span className="num">{plano.ineditas}</span>
@@ -170,6 +170,13 @@ export function Hoje() {
                 </div>
                 <Link to="/giro" className="botao">
                   Marcar blocos
+                </Link>
+              </div>
+            ) : resumo.totalMaterias === 0 ? (
+              <div className="aviso">
+                <strong>Nenhuma matéria no giro ainda.</strong>
+                <Link to="/configuracao" className="botao">
+                  Cadastrar matérias
                 </Link>
               </div>
             ) : (

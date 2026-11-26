@@ -77,3 +77,34 @@ export const alterarLembrete = (e: EstadoApp, id: string, patch: Partial<Omit<Le
 })
 
 export const removerLembrete = (e: EstadoApp, id: string): EstadoApp => ({ ...e, lembretes: e.lembretes.filter((l) => l.id !== id) })
+
+export interface OpcoesNovoConcurso {
+  nome: string
+  manterMaterias: boolean
+  manterParametros: boolean
+  manterProvas: boolean
+}
+
+/**
+ * Começa um concurso do zero: apaga Log, revisão, histórico, caderno de erros e o
+ * progresso no edital, e abre o Giro 1 hoje. Matérias, parâmetros e provas ficam se pedido.
+ */
+export function novoConcurso(e: EstadoApp, o: OpcoesNovoConcurso, hoje: string, padrao: Parametros): EstadoApp {
+  const materias = o.manterMaterias ? e.materias : []
+  const nome = o.nome.trim()
+  const base = o.manterParametros ? e.parametros : padrao
+  return {
+    ...e,
+    parametros: { ...base, concurso: nome || base.concurso },
+    provas: o.manterProvas ? e.provas : [],
+    materias,
+    giro: { numero: 1, inicio: hoje, ordem: materias.filter((m) => m.entraNoGiro).map((m) => m.id), marcacoes: {} },
+    historico: [],
+    revisao: [],
+    lembretes: e.lembretes.map((l) => ({ ...l, feito: false })),
+    log: [],
+    errosTec: { leitura: '', materias: [], topicos: [] },
+    edital: {},
+    horasHoje: null,
+  }
+}

@@ -10,6 +10,7 @@ import {
   removerLembrete,
   removerProva,
   salvarProva,
+  novoConcurso,
   validarMetas,
 } from './config'
 import { metasDaMateria, resumoDoGiro } from './giro'
@@ -58,5 +59,26 @@ describe('Configuração', () => {
     e = alterarLembrete(e, id, { nota: 'Sábado' })
     expect(e.lembretes.at(-1)).toMatchObject({ nome: 'Simulado', nota: 'Sábado', feito: false })
     expect(removerLembrete(e, id).lembretes).toHaveLength(estadoInicial().lembretes.length)
+  })
+})
+
+describe('Começar novo concurso', () => {
+  const padrao = estadoInicial().parametros
+  it('zera tudo e mantém o que foi pedido', () => {
+    const e = novoConcurso(estadoInicial(), { nome: 'TRF 1', manterMaterias: true, manterParametros: true, manterProvas: false }, '2026-12-01', padrao)
+    expect(e).toMatchObject({ log: [], revisao: [], historico: [], provas: [], edital: {}, horasHoje: null })
+    expect(e.giro).toMatchObject({ numero: 1, inicio: '2026-12-01', marcacoes: {} })
+    expect(e.giro.ordem).toHaveLength(11)
+    expect(e.parametros.concurso).toBe('TRF 1')
+    expect(e.errosTec.materias).toHaveLength(0)
+    expect(e.lembretes.every((l) => !l.feito)).toBe(true)
+  })
+
+  it('pode começar sem matérias', () => {
+    const e = novoConcurso(estadoInicial(), { nome: '', manterMaterias: false, manterParametros: false, manterProvas: true }, '2026-12-01', padrao)
+    expect(e.materias).toHaveLength(0)
+    expect(e.giro.ordem).toHaveLength(0)
+    expect(e.provas).toHaveLength(3)
+    expect(e.parametros.concurso).toBe(padrao.concurso)
   })
 })

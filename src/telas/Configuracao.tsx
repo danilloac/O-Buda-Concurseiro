@@ -5,12 +5,15 @@ import {
   alterarMateria,
   alterarParametros,
   novaMateria,
+  novoConcurso,
   novoLembrete,
   removerLembrete,
   removerProva,
   salvarProva,
   validarMetas,
 } from '../dominio/config'
+import { estadoInicial } from '../dados/inicial'
+import { hojeISO } from '../dominio/datas'
 import { MULTIPLICADOR_NIVEL, metasDaMateria, resumoDoGiro, semanasPorGiro } from '../dominio/giro'
 import type { DestinoExtra, Materia, NivelExperiencia, NivelMateria, Parametros } from '../dominio/tipos'
 
@@ -116,6 +119,63 @@ function CartaoMateria({ m }: { m: Materia }) {
         )}
       </div>
     </details>
+  )
+}
+
+function NovoConcurso() {
+  const { estado, atualizar } = useEstado()
+  const [o, setO] = useState({ nome: '', manterMaterias: true, manterParametros: true, manterProvas: false })
+  const [confirmar, setConfirmar] = useState(false)
+  const [feito, setFeito] = useState(false)
+  const caixa = (chave: 'manterMaterias' | 'manterParametros' | 'manterProvas', texto: string) => (
+    <button type="button" className={`check${o[chave] ? ' feito' : ''}`} aria-pressed={o[chave]} onClick={() => setO({ ...o, [chave]: !o[chave] })}>
+      <span className="caixa">{o[chave] ? '✓' : ''}</span> {texto}
+    </button>
+  )
+  return (
+    <section className="cartao formulario novo-concurso" style={{ marginTop: 14 }}>
+      <div className="secao-titulo">
+        <h2>Começar novo concurso</h2>
+      </div>
+      <p className="discreto cfg-nota">
+        Apaga o Log ({estado.log.length} registros), a fila de revisão, o histórico dos giros, o caderno de erros e o progresso no edital, e abre o
+        Giro 1 hoje. Não dá para desfazer: se estiver sincronizado, a nuvem também é zerada.
+      </p>
+      <label className="campo">
+        <span>Nome do novo concurso</span>
+        <input value={o.nome} onChange={(ev) => setO({ ...o, nome: ev.target.value })} placeholder={estado.parametros.concurso} />
+      </label>
+      <div className="checks">
+        {caixa('manterMaterias', 'Manter as matérias e metas')}
+        {caixa('manterParametros', 'Manter horas, tempos e meta')}
+        {caixa('manterProvas', 'Manter as provas')}
+      </div>
+      {feito && <p className="aviso-ok">Pronto. O app está no Giro 1 do novo concurso.</p>}
+      {confirmar ? (
+        <div className="confirma">
+          <button
+            className="botao perigo"
+            onClick={() => {
+              atualizar((e) => novoConcurso(e, o, hojeISO(), estadoInicial().parametros))
+              setConfirmar(false)
+              setFeito(true)
+              setO((x) => ({ ...x, nome: '' }))
+            }}
+          >
+            Apagar e começar
+          </button>
+          <button className="botao secundario" onClick={() => setConfirmar(false)}>
+            Cancelar
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button className="botao secundario" onClick={() => (setConfirmar(true), setFeito(false))}>
+            Começar novo concurso…
+          </button>
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -225,6 +285,7 @@ export function Configuracao() {
             Adicionar
           </button>
         </form>
+        {estado.materias.length === 0 && <p className="vazio">Nenhuma matéria ainda. Adicione as do novo edital aqui.</p>}
         <p className="discreto cfg-nota">A ordem do ciclo muda na tela do Giro. Uma matéria nova entra no fim do ciclo.</p>
       </section>
 
@@ -304,6 +365,7 @@ export function Configuracao() {
           </form>
         </section>
       </div>
+      <NovoConcurso />
     </>
   )
 }
