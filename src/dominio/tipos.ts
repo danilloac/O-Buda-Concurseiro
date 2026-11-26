@@ -76,6 +76,9 @@ export interface TopicoRevisao {
   acumulado: number | null // 0 a 1
   status: StatusTopico
   recorrente: boolean
+  entrouEm?: string // AAAA-MM-DD
+  concluidoEm?: string // quando virou Compreendido
+  concluidoNoGiro?: number // para a regra "só volta depois de 2 giros"
 }
 
 export interface Lembrete {

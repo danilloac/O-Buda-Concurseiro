@@ -383,3 +383,29 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
   .raiox .col-semana { display: none; }
   .tabela .quebra { min-width: 150px; }
 }
+
+/* ---------- Revisão ---------- */
+.regras { margin: -8px 0 16px; max-width: 70ch; }
+.lista-revisao { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.lista-revisao .cartao + .cartao { margin-top: 0; }
+.topico-revisao { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px; }
+.topico-revisao.recorrente { border-color: color-mix(in srgb, var(--perigo) 45%, var(--borda)); }
+.tr-cabeca { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.tr-titulo { min-width: 0; }
+.tr-titulo h3 { line-height: 1.3; }
+.tr-pct { display: flex; flex-direction: column; align-items: flex-end; flex: none; text-align: right; }
+.tr-pct .pct.grande { line-height: 1.1; }
+.segmentado { display: flex; background: var(--superficie-2); border-radius: 12px; padding: 3px; gap: 3px; }
+.segmentado button { flex: 1; border: 0; background: transparent; padding: 8px 6px; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--texto-2); }
+.segmentado button.ativo { background: var(--superficie); color: var(--primaria); box-shadow: var(--sombra); }
+.tr-rodape { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.obs-inline {
+  flex: 1 1 120px; min-width: 0; font: inherit; font-size: 14px; color: var(--texto); background: transparent;
+  border: 1px dashed var(--borda); border-radius: 10px; padding: 7px 10px;
+}
+.obs-inline:focus-visible { outline: 2px solid var(--primaria); border-style: solid; }
+.sugestoes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.sugestoes li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--borda); }
+.sugestoes li:last-child { border-bottom: 0; }
+.sugestoes .registro-texto { min-width: 0; }
+.sugestoes .registro-topico { white-space: normal; }

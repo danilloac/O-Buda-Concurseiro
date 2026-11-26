@@ -57,7 +57,7 @@ const t = (
   acumulado: number,
   status: TopicoRevisao['status'],
   recorrente = false,
-): TopicoRevisao => ({ id, materia, topico, observacao, incidencia, acumulado, status, recorrente })
+): TopicoRevisao => ({ id, materia, topico, observacao, incidencia, acumulado, status, recorrente, entrouEm: '2026-11-24' })
 
 /** Logs Questões: 369 linhas, 979 questões, 660 acertos. */
 export function logInicial(): LogQuestao[] {
