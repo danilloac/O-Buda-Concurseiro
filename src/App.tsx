@@ -7,7 +7,8 @@ import { Registrar } from './telas/Registrar'
 import { Painel } from './telas/Painel'
 import { RaioX } from './telas/RaioX'
 import { Revisao } from './telas/Revisao'
-import { IconeConta, IconeGiro, IconeHoje, IconeMais, IconePainel, IconeRaioX, IconeRegistrar, IconeRevisao } from './componentes/Icones'
+import { Erros } from './telas/Erros'
+import { IconeConta, IconeGiro, IconeHoje, IconeMais, IconePainel, IconeRaioX, IconeRegistrar, IconeRevisao, IconeErros } from './componentes/Icones'
 
 interface Tela {
   rota: string
@@ -24,6 +25,7 @@ const TELAS: Tela[] = [
   { rota: '/painel', nome: 'Painel', icone: <IconePainel />, elemento: <Painel />, principal: true },
   { rota: '/raio-x', nome: 'Raio-X', icone: <IconeRaioX />, elemento: <RaioX /> },
   { rota: '/revisao', nome: 'Revisão', icone: <IconeRevisao />, elemento: <Revisao /> },
+  { rota: '/erros', nome: 'Erros', icone: <IconeErros />, elemento: <Erros /> },
   { rota: '/conta', nome: 'Conta', icone: <IconeConta />, elemento: <Conta /> },
 ]
 

@@ -48,3 +48,9 @@ export const IconeRevisao = () => (
     <path d="M4 19a2 2 0 0 1 2-2h12M9 8h6" />
   </svg>
 )
+export const IconeErros = () => (
+  <svg {...base} aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9 9l6 6M15 9l-6 6" />
+  </svg>
+)

@@ -1,5 +1,6 @@
 import type { EstadoApp, LogQuestao, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
 import logBruto from './log-inicial.json'
+import { errosIniciais } from './erros-inicial'
 
 // Dados iniciais copiados da planilha "TRT 8 e 4" em 26/11/2026
 // (abas Formulário inicial, Configuração inicial, Diário, Revisão e Logs Questões).
@@ -74,7 +75,7 @@ export function logInicial(): LogQuestao[] {
 
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 2,
+    versao: 3,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -142,6 +143,7 @@ export function estadoInicial(): EstadoApp {
       { id: 'pcd', nome: 'Direitos das Pessoas com Deficiência', nota: '', feito: false },
     ],
     log: logInicial(),
+    errosTec: errosIniciais(),
     horasHoje: null,
   }
 }

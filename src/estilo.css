@@ -409,3 +409,27 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
 .sugestoes li:last-child { border-bottom: 0; }
 .sugestoes .registro-texto { min-width: 0; }
 .sugestoes .registro-topico { white-space: normal; }
+
+/* ---------- Caderno de erros ---------- */
+.selo { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.selo::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.selo.alerta { background: color-mix(in srgb, var(--perigo) 14%, transparent); color: var(--perigo); }
+.selo.atencao { background: var(--acento-suave); color: color-mix(in srgb, var(--acento) 60%, var(--texto)); }
+.selo.bem { background: color-mix(in srgb, var(--ideal) 16%, transparent); color: color-mix(in srgb, var(--ideal) 75%, var(--texto)); }
+.selo.neutro { background: var(--superficie-2); color: var(--texto-2); }
+.erra-peso { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.erra-peso li { display: grid; grid-template-columns: minmax(110px, 190px) 1fr 52px 190px; gap: 4px 12px; align-items: center; }
+.ep-nome { font-size: 14px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ep-trilho { position: relative; height: 10px; background: var(--superficie-2); border-radius: 99px; }
+.ep-barra { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: var(--texto-3); }
+.ep-barra.alerta { background: var(--perigo); }
+.ep-barra.bem { background: var(--ideal); }
+.ep-barra.neutro { background: var(--primaria); }
+.ep-um { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--texto); border-radius: 1px; }
+.ep-valor { font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.ep-detalhe { grid-column: 1 / -1; font-size: 12px; }
+@media (max-width: 700px) {
+  .erra-peso li { grid-template-columns: 1fr 52px; }
+  .ep-trilho { grid-column: 1 / -1; grid-row: 2; }
+  .erra-peso .selo { grid-column: 1 / -1; justify-self: start; }
+}

@@ -99,8 +99,29 @@ export interface LogQuestao {
   obs: string
 }
 
+/** Aba Erros Tec: foto da última leitura do caderno de erros do Tec Concursos. */
+export interface ErrosTec {
+  leitura: string // AAAA-MM-DD
+  materias: {
+    materiaId: string
+    noCaderno: number
+    pctProva: number | null // peso da matéria na prova (0 a 1); null = sem peso de TI
+    recorrentes: number
+    acertoRefazer: number | null
+  }[]
+  topicos: {
+    materiaId: string
+    topico: string
+    noCaderno: number
+    refeitasAcertos: number
+    refeitasErros: number
+    recorrentes: number
+    incidencia: Incidencia
+  }[]
+}
+
 export interface EstadoApp {
-  versao: 2
+  versao: 3
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]
@@ -110,5 +131,6 @@ export interface EstadoApp {
   revisao: TopicoRevisao[]
   lembretes: Lembrete[]
   log: LogQuestao[]
+  errosTec: ErrosTec
   horasHoje: { data: string; horas: number } | null
 }
