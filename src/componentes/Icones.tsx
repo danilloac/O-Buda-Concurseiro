@@ -54,3 +54,9 @@ export const IconeErros = () => (
     <path d="M9 9l6 6M15 9l-6 6" />
   </svg>
 )
+export const IconeEdital = () => (
+  <svg {...base} aria-hidden="true">
+    <path d="M9 6h11M9 12h11M9 18h11" />
+    <path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18h2" />
+  </svg>
+)

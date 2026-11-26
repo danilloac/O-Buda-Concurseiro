@@ -120,8 +120,18 @@ export interface ErrosTec {
   }[]
 }
 
+export type ConcursoEdital = 'Ambos' | 'Só TRT 8' | 'Só TRT 4'
+export interface ItemEdital {
+  n: number
+  bloco: string // Gerais, Específicos, Discursiva
+  materiaId: string
+  item: string
+  edital: ConcursoEdital
+}
+export type StatusEdital = 'Não visto' | 'Teoria' | 'Questões' | 'Revisado'
+
 export interface EstadoApp {
-  versao: 3
+  versao: 4
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]
@@ -132,5 +142,6 @@ export interface EstadoApp {
   lembretes: Lembrete[]
   log: LogQuestao[]
   errosTec: ErrosTec
+  edital: Record<string, StatusEdital> // nº do item → status (ausente = Não visto)
   horasHoje: { data: string; horas: number } | null
 }

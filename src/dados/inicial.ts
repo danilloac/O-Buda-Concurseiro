@@ -41,6 +41,7 @@ export const MATERIAS: Materia[] = [
   m('dir-humanos', 'Direitos Humanos', 'Lei seca', null),
   m('legislacao-trt', 'Legislação TRT 8 e TRT 4', 'Lei seca', null),
   m('pdpj', 'Normativos PDPJ-Br', 'Lei seca', null),
+  m('redacao', 'Redação (discursiva)', 'Lei seca', null),
 ]
 
 const marc = (feitos: number, total: number, erros: boolean, revisao = true): MarcacaoMateria => ({
@@ -75,7 +76,7 @@ export function logInicial(): LogQuestao[] {
 
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 3,
+    versao: 4,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -144,6 +145,7 @@ export function estadoInicial(): EstadoApp {
     ],
     log: logInicial(),
     errosTec: errosIniciais(),
+    edital: {},
     horasHoje: null,
   }
 }

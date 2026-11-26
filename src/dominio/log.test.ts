@@ -93,7 +93,9 @@ describe('regras do Log', () => {
   it('migra um estado salvo sem Log', () => {
     const { log: _sem, ...v1 } = { ...estadoInicial(), versao: 1 }
     const e = migrar(v1)
-    expect(e.versao).toBe(3)
+    expect(e.versao).toBe(4)
+    expect(e.edital).toEqual({})
+    expect(e.materias.some((m) => m.id === 'redacao')).toBe(true)
     expect(e.errosTec.materias).toHaveLength(9)
     expect(e.log).toHaveLength(369)
   })

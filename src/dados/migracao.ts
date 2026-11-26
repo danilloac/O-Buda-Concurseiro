@@ -1,5 +1,5 @@
 import type { EstadoApp } from '../dominio/tipos'
-import { logInicial } from './inicial'
+import { MATERIAS, logInicial } from './inicial'
 import { errosIniciais } from './erros-inicial'
 
 /** Atualiza um estado salvo por uma versão anterior do app. */
@@ -12,6 +12,16 @@ export function migrar(bruto: unknown): EstadoApp {
   if (e.versao! < 3) {
     // v2 não tinha o caderno de erros do Tec.
     e = { ...e, versao: 3, errosTec: e.errosTec ?? errosIniciais() }
+  }
+  if (e.versao! < 4) {
+    // v3 não tinha o edital verticalizado nem a matéria Redação.
+    const materias = e.materias ?? []
+    e = {
+      ...e,
+      versao: 4,
+      edital: e.edital ?? {},
+      materias: materias.some((x) => x.id === 'redacao') ? materias : [...materias, ...MATERIAS.filter((x) => x.id === 'redacao')],
+    }
   }
   return e as EstadoApp
 }
