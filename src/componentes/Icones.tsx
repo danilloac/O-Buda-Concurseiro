@@ -29,3 +29,16 @@ export const IconePainel = () => (
     <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
   </svg>
 )
+export const IconeRaioX = () => (
+  <svg {...base} aria-hidden="true">
+    <circle cx="11" cy="11" r="7" />
+    <path d="M21 21l-4.3-4.3M8 11h6M11 8v6" />
+  </svg>
+)
+export const IconeMais = () => (
+  <svg {...base} aria-hidden="true">
+    <circle cx="5" cy="12" r="1.5" />
+    <circle cx="12" cy="12" r="1.5" />
+    <circle cx="19" cy="12" r="1.5" />
+  </svg>
+)
