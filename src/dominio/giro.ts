@@ -216,6 +216,7 @@ export function fecharGiro(estado: EstadoApp, hoje: string): EstadoApp {
     materiasComErros: resumo.comErros,
     materiasComRevisao: resumo.comRevisao,
     totalMaterias: resumo.totalMaterias,
+    concluidas: resumo.concluidas,
   }
   const novo: GiroAtual = {
     numero: resumo.numero + 1,

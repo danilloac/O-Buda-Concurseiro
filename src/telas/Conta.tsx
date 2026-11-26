@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useEstado } from '../dados/Estado'
 import { entrarComGoogle, sair, supabase } from '../dados/supabase'
 import { semanasPorGiro } from '../dominio/giro'
@@ -70,7 +71,21 @@ export function Conta() {
             <span>semanas por giro</span>
           </div>
         </div>
-        <p className="discreto">A edição desses parâmetros e das matérias chega na tela de Configuração.</p>
+        <p className="discreto">
+          Para mudar o plano, as matérias, as provas e os lembretes, use a <Link to="/configuracao">Configuração</Link>.
+        </p>
+      </section>
+
+      <section className="cartao conta">
+        <h2>Leitura do Tec</h2>
+        <p>
+          Última leitura: {estado.errosTec.leitura ? estado.errosTec.leitura.split('-').reverse().join('/') : 'nenhuma'}.{' '}
+          {estado.importacoes.length ? `${estado.importacoes.length} leituras recebidas direto no app.` : 'Ainda nenhuma recebida direto no app.'}
+        </p>
+        <p className="discreto">
+          Peça ao Claude para ler as estatísticas do Tec. Ele lê os cadernos no Chrome, grava na planilha e abre este app na mesma janela para
+          mandar a leitura. {supabase ? (sessao ? 'Como você está conectado, o celular recebe na sincronização.' : 'Entre com o Google neste navegador para o celular receber também.') : 'Com a nuvem ligada, o celular recebe na sincronização.'}
+        </p>
       </section>
 
       <section className="cartao conta">

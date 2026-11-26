@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import type { EstadoApp } from '../dominio/tipos'
+import { aplicarLeituraTec, type LeituraTec, type ResumoImportacao } from '../dominio/tec'
 import { estadoInicial } from './inicial'
+import { migrar } from './migracao'
 import { baixarEstado, enviarEstado, supabase } from './supabase'
 
 const CHAVE_LOCAL = 'buda:estado:v1'
@@ -9,7 +11,7 @@ const CHAVE_LOCAL = 'buda:estado:v1'
 function lerLocal(): EstadoApp {
   try {
     const bruto = localStorage.getItem(CHAVE_LOCAL)
-    if (bruto) return JSON.parse(bruto) as EstadoApp
+    if (bruto) return migrar(JSON.parse(bruto))
   } catch {
     /* navegador sem armazenamento: segue com o inicial */
   }
@@ -32,6 +34,17 @@ interface Contexto {
   sessao: Session | null
   sync: Sync
   restaurarInicial: () => void
+  importarTec: (d: LeituraTec) => ResumoImportacao
+}
+
+declare global {
+  interface Window {
+    /** Usado pela leitura do Tec (skill no Chrome): manda a leitura para o app aberto nesta aba. */
+    budaTec?: {
+      situacao: () => { pronto: boolean; logado: boolean; sync: Sync; ultimaLeitura: string; registros: number }
+      importar: (d: LeituraTec) => ResumoImportacao
+    }
+  }
 }
 
 const Ctx = createContext<Contexto | null>(null)
@@ -59,7 +72,8 @@ export function ProvedorEstado({ children }: { children: ReactNode }) {
     }
     setSync('sincronizando')
     baixarEstado(sessao.user.id)
-      .then((remoto) => {
+      .then((salvo) => {
+        const remoto = salvo ? migrar(salvo) : null
         setEstado((local) => {
           const fica = remoto && remoto.atualizadoEm > local.atualizadoEm ? remoto : local
           gravarLocal(fica)
@@ -94,7 +108,43 @@ export function ProvedorEstado({ children }: { children: ReactNode }) {
 
   const restaurarInicial = useCallback(() => atualizar(() => estadoInicial()), [atualizar])
 
-  return <Ctx.Provider value={{ estado, atualizar, sessao, sync, restaurarInicial }}>{children}</Ctx.Provider>
+  const estadoRef = useRef(estado)
+  estadoRef.current = estado
+  const syncRef = useRef(sync)
+  syncRef.current = sync
+
+  const importarTec = useCallback(
+    (d: LeituraTec): ResumoImportacao => {
+      const vazio = { ok: false, questoes: 0, resolvidas: 0, acertos: 0, topicosErros: 0, materiasNovas: [] }
+      // Logado, espera baixar a versão da nuvem para não gravar por cima do que veio do celular.
+      if (sessao && !pronto.current) return { ...vazio, erro: 'Aguarde a sincronização terminar e tente de novo.' }
+      const r = aplicarLeituraTec(estadoRef.current, d)
+      if (r.resumo.ok && !r.resumo.repetido) {
+        estadoRef.current = r.estado
+        atualizar(() => r.estado)
+      }
+      return r.resumo
+    },
+    [sessao, atualizar],
+  )
+
+  useEffect(() => {
+    window.budaTec = {
+      situacao: () => ({
+        pronto: !sessao || pronto.current,
+        logado: !!sessao,
+        sync: syncRef.current,
+        ultimaLeitura: estadoRef.current.errosTec.leitura,
+        registros: estadoRef.current.log.length,
+      }),
+      importar: importarTec,
+    }
+    return () => {
+      delete window.budaTec
+    }
+  }, [sessao, importarTec])
+
+  return <Ctx.Provider value={{ estado, atualizar, sessao, sync, restaurarInicial, importarTec }}>{children}</Ctx.Provider>
 }
 
 export function useEstado() {

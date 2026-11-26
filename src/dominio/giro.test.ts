@@ -109,7 +109,7 @@ describe('regras isoladas', () => {
     const e = fecharGiro(estadoInicial(), '2026-11-28')
     expect(e.giro.numero).toBe(7)
     expect(e.giro.inicio).toBe('2026-11-28')
-    expect(e.historico[0]).toMatchObject({ numero: 6, feitas: 141, meta: 144 })
+    expect(e.historico.at(-1)).toMatchObject({ numero: 6, feitas: 141, meta: 144 })
     expect(resumoDoGiro(e).feitas).toBe(0)
   })
 

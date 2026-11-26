@@ -1,7 +1,10 @@
-import type { EstadoApp, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
+import type { EstadoApp, GiroFechado, LogQuestao, Materia, MarcacaoMateria, TopicoRevisao } from '../dominio/tipos'
+import logBruto from './log-inicial.json'
+import { errosIniciais } from './erros-inicial'
+import { EDITAL } from './edital'
 
 // Dados iniciais copiados da planilha "TRT 8 e 4" em 26/11/2026
-// (abas Formulário inicial, Configuração inicial, Diário e Revisão).
+// (abas Formulário inicial, Configuração inicial, Diário, Revisão e Logs Questões).
 
 const m = (
   id: string,
@@ -39,6 +42,7 @@ export const MATERIAS: Materia[] = [
   m('dir-humanos', 'Direitos Humanos', 'Lei seca', null),
   m('legislacao-trt', 'Legislação TRT 8 e TRT 4', 'Lei seca', null),
   m('pdpj', 'Normativos PDPJ-Br', 'Lei seca', null),
+  m('redacao', 'Redação (discursiva)', 'Lei seca', null),
 ]
 
 const marc = (feitos: number, total: number, erros: boolean, revisao = true): MarcacaoMateria => ({
@@ -56,11 +60,44 @@ const t = (
   acumulado: number,
   status: TopicoRevisao['status'],
   recorrente = false,
-): TopicoRevisao => ({ id, materia, topico, observacao, incidencia, acumulado, status, recorrente })
+): TopicoRevisao => ({ id, materia, topico, observacao, incidencia, acumulado, status, recorrente, entrouEm: '2026-11-24' })
+
+/** Logs Questões: 369 linhas, 979 questões, 660 acertos. */
+export function logInicial(): LogQuestao[] {
+  return (logBruto as [string, string, string, number, number][]).map(([data, materiaId, topico, resolvidas, acertos], i) => ({
+    id: `p${i + 1}`,
+    data,
+    materiaId,
+    topico,
+    resolvidas,
+    acertos,
+    obs: '',
+  }))
+}
+
+/** Aba Histórico: giros 1 a 5. */
+export function historicoInicial(): GiroFechado[] {
+  const g = (numero: number, inicio: string, fechamento: string, materias: number, diasErros: number, diasRevisao: number): GiroFechado => ({
+    numero,
+    inicio,
+    fechamento,
+    totalMaterias: materias,
+    concluidas: materias,
+    diasErros,
+    diasRevisao,
+  })
+  return [
+    g(1, '', '2026-10-19', 13, 6, 6),
+    g(2, '2026-10-19', '2026-10-26', 13, 6, 6),
+    g(3, '2026-10-26', '2026-11-07', 11, 9, 11),
+    g(4, '2026-11-07', '2026-11-13', 11, 11, 11),
+    g(5, '2026-11-13', '2026-11-21', 11, 11, 10),
+  ]
+}
 
 export function estadoInicial(): EstadoApp {
   return {
-    versao: 1,
+    versao: 7,
     atualizadoEm: new Date(0).toISOString(),
     parametros: {
       concurso: 'TRT 8 e TRT 4 — Analista Judiciário, área TI (FCC)',
@@ -100,7 +137,7 @@ export function estadoInicial(): EstadoApp {
         seguranca: marc(0, 8, false),
       },
     },
-    historico: [],
+    historico: historicoInicial(),
     revisao: [
       t('r1', 'Sistemas Operacionais', 'Unix e Linux', 'GRAN', 'Altíssima', 0.4, 'Parcialmente compreendido'),
       t('r2', 'Sistemas Operacionais', 'Windows Powershell e Prompt de Comando', '', 'Alta', 0.38, 'Não compreendido'),
@@ -127,6 +164,11 @@ export function estadoInicial(): EstadoApp {
       { id: 'sustentabilidade', nome: 'Sustentabilidade', nota: 'Tudo', feito: false },
       { id: 'pcd', nome: 'Direitos das Pessoas com Deficiência', nota: '', feito: false },
     ],
+    log: logInicial(),
+    errosTec: errosIniciais(),
+    editalItens: EDITAL,
+    edital: {},
+    importacoes: [],
     horasHoje: null,
   }
 }
