@@ -1,0 +1,99 @@
+// Modelo de dados do app. Espelha as abas da planilha "Método do Buda":
+// Formulário inicial + Configuração inicial (parâmetros e matérias),
+// Diário (giro atual), Histórico (giros fechados) e Revisão (fila de teoria).
+
+export type NivelExperiencia = 'Iniciante' | 'Intermediário' | 'Avançado'
+export type NivelMateria = 'Facilidade' | 'Dificuldade' | 'Lei seca'
+export type DestinoExtra = 'Núcleo' | 'Cauda' | 'Caderno único'
+export type Incidencia = 'Altíssima' | 'Alta' | 'Moderada' | 'Baixa' | 'Baixíssima' | ''
+export type StatusTopico = 'Não compreendido' | 'Parcialmente compreendido' | 'Compreendido'
+
+export interface Prova {
+  id: string
+  nome: string
+  banca: string
+  data: string // AAAA-MM-DD
+}
+
+export interface Parametros {
+  concurso: string
+  horasPorDia: number
+  diasPorSemana: number
+  nivel: NivelExperiencia
+  minPorRevisao: number
+  ritmoRevisaoHoras: number // 1 revisão a cada N horas
+  minPorInedita: number
+  minPorErro: number
+  metaAcerto: number // 0 a 1
+  errosPorDia: number
+  tamanhoBloco: number
+  espacamentoRevisao: number // posições no ciclo
+}
+
+export interface Materia {
+  id: string
+  nome: string
+  entraNoGiro: boolean
+  nivel: NivelMateria
+  // Metas base (nível Intermediário). O multiplicador do nível ajusta.
+  minimo: number
+  ideal: number
+  maximo: number
+  caudaNoIdeal: number
+  extraVaiPara: DestinoExtra
+}
+
+export interface MarcacaoMateria {
+  blocos: boolean[]
+  erros: boolean
+  revisao: boolean
+}
+
+export interface GiroAtual {
+  numero: number
+  inicio: string // AAAA-MM-DD
+  ordem: string[] // ids de matéria, na ordem do ciclo
+  marcacoes: Record<string, MarcacaoMateria>
+}
+
+export interface GiroFechado {
+  numero: number
+  inicio: string
+  fechamento: string
+  feitas: number
+  meta: number
+  materiasComErros: number
+  materiasComRevisao: number
+  totalMaterias: number
+}
+
+export interface TopicoRevisao {
+  id: string
+  materia: string
+  topico: string
+  observacao: string
+  incidencia: Incidencia
+  acumulado: number | null // 0 a 1
+  status: StatusTopico
+  recorrente: boolean
+}
+
+export interface Lembrete {
+  id: string
+  nome: string
+  nota: string
+  feito: boolean
+}
+
+export interface EstadoApp {
+  versao: 1
+  atualizadoEm: string // ISO
+  parametros: Parametros
+  provas: Prova[]
+  materias: Materia[]
+  giro: GiroAtual
+  historico: GiroFechado[]
+  revisao: TopicoRevisao[]
+  lembretes: Lembrete[]
+  horasHoje: { data: string; horas: number } | null
+}
