@@ -10,7 +10,8 @@ import { Revisao } from './telas/Revisao'
 import { Erros } from './telas/Erros'
 import { Edital } from './telas/Edital'
 import { Historico } from './telas/Historico'
-import { IconeConta, IconeGiro, IconeHoje, IconeMais, IconePainel, IconeRaioX, IconeRegistrar, IconeRevisao, IconeErros, IconeEdital, IconeHistorico } from './componentes/Icones'
+import { Configuracao } from './telas/Configuracao'
+import { IconeConta, IconeGiro, IconeHoje, IconeMais, IconePainel, IconeRaioX, IconeRegistrar, IconeRevisao, IconeErros, IconeEdital, IconeHistorico, IconeConfig } from './componentes/Icones'
 
 interface Tela {
   rota: string
@@ -30,6 +31,7 @@ const TELAS: Tela[] = [
   { rota: '/erros', nome: 'Erros', icone: <IconeErros />, elemento: <Erros /> },
   { rota: '/edital', nome: 'Edital', icone: <IconeEdital />, elemento: <Edital /> },
   { rota: '/historico', nome: 'Histórico', icone: <IconeHistorico />, elemento: <Historico /> },
+  { rota: '/configuracao', nome: 'Configuração', icone: <IconeConfig />, elemento: <Configuracao /> },
   { rota: '/conta', nome: 'Conta', icone: <IconeConta />, elemento: <Conta /> },
 ]
 

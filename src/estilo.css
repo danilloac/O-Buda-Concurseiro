@@ -469,3 +469,34 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
 .sem-quebra { white-space: nowrap; }
 .linha-atual { background: color-mix(in srgb, var(--primaria) 5%, transparent); }
 .hist-chip { margin-left: 8px; font-size: 11px; padding: 1px 8px; }
+
+/* ---------- Configuração ---------- */
+.cfg-grade { align-items: start; }
+.cfg-nota { margin: 0; }
+.com-sufixo { position: relative; display: block; }
+.com-sufixo input { width: 100%; }
+.sufixo { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 500; color: var(--texto-3); pointer-events: none; }
+.com-sufixo input[type=number] { padding-right: 48px; -moz-appearance: textfield; }
+.com-sufixo input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.cfg-sub { font-size: 13px; font-weight: 600; color: var(--texto-3); text-transform: uppercase; letter-spacing: .04em; margin: 14px 0 4px; }
+.cfg-materia { border-top: 1px solid var(--borda); }
+.cfg-materia summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 11px 0; }
+.cfg-materia summary::-webkit-details-marker { display: none; }
+.cfg-nome { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cfg-nome::before { content: '▸'; display: inline-block; width: 16px; color: var(--texto-3); transition: transform .15s; }
+.cfg-materia[open] .cfg-nome::before { transform: rotate(90deg); }
+.cfg-metas { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cfg-corpo { display: flex; flex-direction: column; gap: 12px; padding: 4px 0 16px 16px; }
+.cfg-corpo .check { align-self: flex-start; }
+.cfg-metas-campos > * { flex: 1 1 90px; }
+.cfg-add { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--borda); }
+.cfg-add .filtro { flex: 1; min-width: 0; }
+.cfg-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cfg-lista li, .cfg-nova { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .7fr) minmax(0, 1.2fr) auto; gap: 6px; align-items: center; }
+.cfg-lista .lembrete-cfg, .cfg-nova.lembrete-cfg { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+.cfg-nova { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--borda); }
+.cfg-lista .filtro, .cfg-add .filtro { width: 100%; max-width: none; min-width: 0; padding: 8px 10px; font-size: 16px; }
+@media (max-width: 560px) {
+  .cfg-lista li:not(.lembrete-cfg), .cfg-nova:not(.lembrete-cfg) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+  .cfg-lista li:not(.lembrete-cfg) > :first-child, .cfg-nova:not(.lembrete-cfg) > :first-child { grid-column: 1 / -1; }
+}
