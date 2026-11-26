@@ -24,3 +24,8 @@ export const IconeRegistrar = () => (
     <path d="M8 8h8M8 12h8M8 16h4" />
   </svg>
 )
+export const IconePainel = () => (
+  <svg {...base} aria-hidden="true">
+    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+  </svg>
+)

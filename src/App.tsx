@@ -3,7 +3,8 @@ import { Hoje } from './telas/Hoje'
 import { Giro } from './telas/Giro'
 import { Conta } from './telas/Conta'
 import { Registrar } from './telas/Registrar'
-import { IconeConta, IconeGiro, IconeHoje, IconeRegistrar } from './componentes/Icones'
+import { Painel } from './telas/Painel'
+import { IconeConta, IconeGiro, IconeHoje, IconePainel, IconeRegistrar } from './componentes/Icones'
 
 export function App() {
   const classe = ({ isActive }: { isActive: boolean }) => (isActive ? 'ativo' : '')
@@ -22,6 +23,9 @@ export function App() {
         <NavLink to="/registrar" className={classe}>
           <IconeRegistrar /> Registrar
         </NavLink>
+        <NavLink to="/painel" className={classe}>
+          <IconePainel /> Painel
+        </NavLink>
         <NavLink to="/conta" className={classe}>
           <IconeConta /> Conta
         </NavLink>
@@ -31,6 +35,7 @@ export function App() {
           <Route path="/" element={<Hoje />} />
           <Route path="/giro" element={<Giro />} />
           <Route path="/registrar" element={<Registrar />} />
+          <Route path="/painel" element={<Painel />} />
           <Route path="/conta" element={<Conta />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
