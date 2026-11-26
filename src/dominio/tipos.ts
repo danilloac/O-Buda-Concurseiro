@@ -125,10 +125,11 @@ export interface ErrosTec {
   }[]
 }
 
-export type ConcursoEdital = 'Ambos' | 'Só TRT 8' | 'Só TRT 4'
+/** 'Ambos' ou '' = cai em todos os concursos; 'Só X' (ou só 'X') = só no concurso X. */
+export type ConcursoEdital = string
 export interface ItemEdital {
   n: number
-  bloco: string // Gerais, Específicos, Discursiva
+  bloco: string // Gerais, Específicos, Discursiva ('' quando importado)
   materiaId: string
   item: string
   edital: ConcursoEdital
@@ -136,7 +137,7 @@ export interface ItemEdital {
 export type StatusEdital = 'Não visto' | 'Teoria' | 'Questões' | 'Revisado'
 
 export interface EstadoApp {
-  versao: 5
+  versao: 6
   atualizadoEm: string // ISO
   parametros: Parametros
   provas: Prova[]
@@ -147,6 +148,7 @@ export interface EstadoApp {
   lembretes: Lembrete[]
   log: LogQuestao[]
   errosTec: ErrosTec
+  editalItens: ItemEdital[]
   edital: Record<string, StatusEdital> // nº do item → status (ausente = Não visto)
   horasHoje: { data: string; horas: number } | null
 }

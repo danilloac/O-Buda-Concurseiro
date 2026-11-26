@@ -104,6 +104,7 @@ export function novoConcurso(e: EstadoApp, o: OpcoesNovoConcurso, hoje: string, 
     lembretes: e.lembretes.map((l) => ({ ...l, feito: false })),
     log: [],
     errosTec: { leitura: '', materias: [], topicos: [] },
+    editalItens: [],
     edital: {},
     horasHoje: null,
   }

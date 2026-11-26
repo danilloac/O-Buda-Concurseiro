@@ -1,9 +1,10 @@
+import { sugestoesDeTopico } from '../dominio/edital'
 import { useMemo, useState, type FormEvent } from 'react'
 import { useEstado } from '../dados/Estado'
 import { hojeISO } from '../dominio/datas'
 
 const dm = (iso: string) => `${iso.slice(8, 10)}/${iso.slice(5, 7)}`
-import { faixaAcerto, fmtPct, topicosDaMateria } from '../dominio/log'
+import { faixaAcerto, fmtPct } from '../dominio/log'
 import {
   REGRAS_REVISAO,
   adicionarNaRevisao,
@@ -111,7 +112,7 @@ export function Revisao() {
   const feitos = estado.revisao.filter((t) => t.status === 'Compreendido')
   const sugestoes = useMemo(() => sugestoesDeRevisao(estado), [estado])
   const nomeDe = (id: string) => estado.materias.find((m) => m.id === id)?.nome ?? id
-  const sugestoesTopico = useMemo(() => topicosDaMateria(estado.log, novo.materiaId), [estado.log, novo.materiaId])
+  const sugestoesTopico = useMemo(() => sugestoesDeTopico(estado, novo.materiaId), [estado, novo.materiaId])
 
   const adicionar = (ev: FormEvent) => {
     ev.preventDefault()

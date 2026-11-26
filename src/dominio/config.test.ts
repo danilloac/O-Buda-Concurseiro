@@ -66,7 +66,7 @@ describe('Começar novo concurso', () => {
   const padrao = estadoInicial().parametros
   it('zera tudo e mantém o que foi pedido', () => {
     const e = novoConcurso(estadoInicial(), { nome: 'TRF 1', manterMaterias: true, manterParametros: true, manterProvas: false }, '2026-12-01', padrao)
-    expect(e).toMatchObject({ log: [], revisao: [], historico: [], provas: [], edital: {}, horasHoje: null })
+    expect(e).toMatchObject({ log: [], revisao: [], historico: [], provas: [], edital: {}, editalItens: [], horasHoje: null })
     expect(e.giro).toMatchObject({ numero: 1, inicio: '2026-12-01', marcacoes: {} })
     expect(e.giro.ordem).toHaveLength(11)
     expect(e.parametros.concurso).toBe('TRF 1')

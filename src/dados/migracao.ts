@@ -1,6 +1,7 @@
 import type { EstadoApp } from '../dominio/tipos'
 import { MATERIAS, historicoInicial, logInicial } from './inicial'
 import { errosIniciais } from './erros-inicial'
+import { EDITAL } from './edital'
 
 /** Atualiza um estado salvo por uma versão anterior do app. */
 export function migrar(bruto: unknown): EstadoApp {
@@ -29,6 +30,10 @@ export function migrar(bruto: unknown): EstadoApp {
     const numeros = new Set(atual.map((g) => g.numero))
     const faltam = historicoInicial().filter((g) => !numeros.has(g.numero) && g.numero < (e.giro?.numero ?? 6))
     e = { ...e, versao: 5, historico: [...faltam, ...atual].sort((a, b) => a.numero - b.numero) }
+  }
+  if (e.versao! < 6) {
+    // v5 tinha o edital fixo no código: passa a ficar nos dados, para poder importar outro.
+    e = { ...e, versao: 6, editalItens: e.editalItens ?? EDITAL }
   }
   return e as EstadoApp
 }

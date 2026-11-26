@@ -500,3 +500,14 @@ h3 { font-size: 16px; font-family: Inter, system-ui, sans-serif; font-weight: 60
   .cfg-lista li:not(.lembrete-cfg), .cfg-nova:not(.lembrete-cfg) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
   .cfg-lista li:not(.lembrete-cfg) > :first-child, .cfg-nova:not(.lembrete-cfg) > :first-child { grid-column: 1 / -1; }
 }
+
+/* ---------- Importar edital ---------- */
+.importar-edital { margin-bottom: 14px; }
+.importar-edital textarea { font: inherit; font-size: 16px; color: var(--texto); background: var(--superficie-2); border: 1px solid var(--borda); border-radius: 12px; padding: 10px 12px; width: 100%; min-width: 0; resize: vertical; }
+.importar-edital .arquivo { position: relative; align-self: flex-start; cursor: pointer; }
+.importar-edital .arquivo input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.previa-importacao { background: var(--superficie-2); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+.previa-importacao ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.previa-importacao li { display: inline-flex; gap: 6px; align-items: center; }
+.previa-importacao .erro { margin: 8px 0 0; }
+.importar-edital textarea::placeholder { color: var(--texto-3); font-weight: 400; }

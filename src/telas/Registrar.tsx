@@ -1,3 +1,4 @@
+import { sugestoesDeTopico } from '../dominio/edital'
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { useEstado } from '../dados/Estado'
 import { dataCurta, hojeISO } from '../dominio/datas'
@@ -10,7 +11,6 @@ import {
   porDia,
   registrar,
   remover,
-  topicosDaMateria,
   totais,
   validar,
   type Rascunho,
@@ -73,7 +73,7 @@ export function Registrar() {
     return () => window.clearTimeout(t)
   }, [aviso])
 
-  const sugestoes = useMemo(() => topicosDaMateria(estado.log, campos.materiaId), [estado.log, campos.materiaId])
+  const sugestoes = useMemo(() => sugestoesDeTopico(estado, campos.materiaId), [estado, campos.materiaId])
   const rascunho = paraRascunho(campos)
   const previa =
     Number.isFinite(rascunho.resolvidas) && rascunho.resolvidas > 0 && Number.isFinite(rascunho.acertos)

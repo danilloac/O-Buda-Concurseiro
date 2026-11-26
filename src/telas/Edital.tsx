@@ -1,15 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useEstado } from '../dados/Estado'
-import { EDITAL } from '../dados/edital'
-import { comparacao, contar, marcarItem, noRecorte, pctVisto, porMateria, proximoStatus, statusDe, type Contagem, type Recorte } from '../dominio/edital'
+import { ImportarEdital } from '../componentes/ImportarEdital'
+import { comparacao, concursoDoItem, concursosDoEdital, contar, marcarItem, noRecorte, pctVisto, porMateria, proximoStatus, statusDe, type Contagem, type Recorte } from '../dominio/edital'
 import { fmtPct } from '../dominio/log'
 import type { StatusEdital } from '../dominio/tipos'
 
-const RECORTES: { valor: Recorte; nome: string }[] = [
-  { valor: 'todos', nome: 'Os dois' },
-  { valor: 'trt8', nome: 'TRT 8' },
-  { valor: 'trt4', nome: 'TRT 4' },
-]
 
 const CLASSE: Record<StatusEdital, string> = { 'Não visto': 'nao', Teoria: 'teoria', Questões: 'questoes', Revisado: 'revisado' }
 const AVANCO: StatusEdital[] = ['Teoria', 'Questões', 'Revisado']
@@ -29,9 +24,14 @@ function Trilho({ c, total }: { c: Contagem; total: number }) {
 export function Edital() {
   const { estado, atualizar } = useEstado()
   const [recorte, setRecorte] = useState<Recorte>('todos')
+  const [importando, setImportando] = useState(false)
+  const EDITAL = estado.editalItens
+  const concursos = useMemo(() => concursosDoEdital(EDITAL), [EDITAL])
+  const recortes: { valor: Recorte; nome: string }[] = [{ valor: 'todos', nome: concursos.length === 2 ? 'Os dois' : 'Todos' }, ...concursos.map((c) => ({ valor: c, nome: c }))]
+  const recorteValido = recortes.some((r) => r.valor === recorte) ? recorte : 'todos'
   const [busca, setBusca] = useState('')
   const nomes = useMemo(() => new Map(estado.materias.map((m) => [m.id, m.nome])), [estado.materias])
-  const itens = useMemo(() => noRecorte(EDITAL, recorte), [recorte])
+  const itens = useMemo(() => noRecorte(EDITAL, recorteValido), [EDITAL, recorteValido])
   const comp = comparacao(EDITAL)
   const geral = contar(itens, estado.edital)
   const termo = sem(busca.trim())
@@ -42,18 +42,29 @@ export function Edital() {
     <>
       <header className="topo">
         <div>
-          <div className="sobre">TRT 8 e TRT 4 · FCC</div>
+          <div className="sobre">{estado.parametros.concurso}</div>
           <h1>Edital verticalizado</h1>
         </div>
+        {EDITAL.length > 0 && !importando && (
+          <button className="botao secundario pequeno" onClick={() => setImportando(true)}>
+            Importar edital
+          </button>
+        )}
       </header>
 
+      {(importando || EDITAL.length === 0) && <ImportarEdital aoFechar={EDITAL.length ? () => setImportando(false) : undefined} />}
+      {EDITAL.length > 0 && (
+        <>
+
+      {concursos.length > 0 && (
       <div className="segmentado recorte" role="radiogroup" aria-label="Qual edital">
-        {RECORTES.map((r) => (
-          <button key={r.valor} role="radio" aria-checked={recorte === r.valor} className={recorte === r.valor ? 'ativo' : ''} onClick={() => setRecorte(r.valor)}>
+        {recortes.map((r) => (
+          <button key={r.valor} role="radio" aria-checked={recorteValido === r.valor} className={recorteValido === r.valor ? 'ativo' : ''} onClick={() => setRecorte(r.valor)}>
             {r.nome} <span className="discreto">{noRecorte(EDITAL, r.valor).length}</span>
           </button>
         ))}
       </div>
+      )}
 
       <section className="kpis" aria-label="Resumo do edital">
         <div className="kpi">
@@ -68,13 +79,19 @@ export function Edital() {
           <b>{geral.Revisado}</b>
           <span className="discreto">{geral.Questões} com questões</span>
         </div>
-        <div className="kpi">
-          <span className="kpi-rotulo">Em comum</span>
-          <b>{comp.ambos}</b>
-          <span className="discreto">
-            só TRT 8: {comp.so8} · só TRT 4: {comp.so4}
-          </span>
-        </div>
+        {concursos.length > 0 ? (
+          <div className="kpi">
+            <span className="kpi-rotulo">Em comum</span>
+            <b>{comp.comuns}</b>
+            <span className="discreto">{concursos.map((c) => `só ${c}: ${comp.porConcurso[c]}`).join(' · ')}</span>
+          </div>
+        ) : (
+          <div className="kpi">
+            <span className="kpi-rotulo">Matérias</span>
+            <b>{grupos.length}</b>
+            <span className="discreto">no edital</span>
+          </div>
+        )}
       </section>
 
       <section className="cartao">
@@ -96,7 +113,7 @@ export function Edital() {
           {grupos.map((g) => {
             const vistos = g.itens.length - g.contagem['Não visto']
             return (
-              <details key={`${g.materiaId}|${recorte}|${termo ? 'b' : ''}`} className="eg" open={!!termo}>
+              <details key={`${g.materiaId}|${recorteValido}|${termo ? 'b' : ''}`} className="eg" open={!!termo}>
                 <summary>
                   <span className="eg-nome">{nomes.get(g.materiaId) ?? g.materiaId}</span>
                   <span className="eg-conta">
@@ -113,7 +130,7 @@ export function Edital() {
                         <span className="eg-n">{i.n}</span>
                         <span className="eg-texto">
                           {i.item}
-                          {i.edital !== 'Ambos' && <span className="chip eg-so">{i.edital}</span>}
+                          {concursoDoItem(i) && <span className="chip eg-so">só {concursoDoItem(i)}</span>}
                         </span>
                         <button
                           className={`eg-status ${CLASSE[s]}`}
@@ -135,6 +152,8 @@ export function Edital() {
           planilha.
         </p>
       </section>
+        </>
+      )}
     </>
   )
 }
